@@ -2,7 +2,7 @@
 //  tvexplorerApp.swift
 //  Shared
 //
-//  Created by paulo Baltieri on 04/06/22.
+//  Created by Paulo Baltieri on 04/06/22.
 //
 
 import SwiftUI
