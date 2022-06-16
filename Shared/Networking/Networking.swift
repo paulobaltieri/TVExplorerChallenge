@@ -7,8 +7,9 @@
 
 import Foundation
 
+
 class Networking: ObservableObject {
-    @Publisher var results = [TVSeries]()
+    @Published var results = [TVSeries]()
     func requestTVShow(name: String) async {
         guard let url = URL(string: "https://api.tvmaze.com/search/shows?q=\(name)") else {
             return
