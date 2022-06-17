@@ -10,19 +10,20 @@ import Foundation
 
 class Networking: ObservableObject {
     @Published var results = [TVSeries]()
-    func requestTVShow(name: String) async {
-        guard let url = URL(string: "https://api.tvmaze.com/search/shows?q=\(name)") else {
-            return
+    
+    enum NetworkError: Error {
+        case invalidServerResponse
+        case basRequest
+        case internalServerError
+    }
+    
+    func fetchTVShowData(_ url: URL) async throws {
+        // request
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw NetworkError.internalServerError
         }
-        do {
-            let (data, _) = try await URLSession.shared.data(from: url)
-            if let decodedResponse = try? JSONDecoder().decode([TVSeries].self, from: data) {
-                DispatchQueue.main.async {
-                    self.results = decodedResponse
-                }
-            }
-        } catch {
-            print("Invalid Data")
-        }
+        let decodedResponse = try JSONDecoder().decode([TVSeries].self, from: data)
+        self.results = decodedResponse
     }
 }
