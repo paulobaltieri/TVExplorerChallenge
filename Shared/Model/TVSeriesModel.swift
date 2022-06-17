@@ -7,13 +7,14 @@
 
 import Foundation
 
-struct TVSeries: Decodable, Identifiable {
+struct TVSeries: Codable, Identifiable {
     var id = UUID()
-    var score: Float
     var show: TVShow
+    var score: Float
+    private enum CodingKeys: String, CodingKey { case score, show }
 }
 
-struct TVShow: Decodable {
+struct TVShow: Codable {
     var name: String?
     var summary: String?
     var image: Image?
@@ -21,11 +22,11 @@ struct TVShow: Decodable {
     var status: String?
 }
 
-struct Rating: Decodable {
+struct Rating: Codable {
     var average: Double
 }
 
-struct Image: Decodable {
+struct Image: Codable {
     var medium: String?
     var original: String?
 }

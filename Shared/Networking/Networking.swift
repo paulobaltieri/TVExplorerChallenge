@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 
 class Networking: ObservableObject {
@@ -18,12 +19,20 @@ class Networking: ObservableObject {
     }
     
     func fetchTVShowData(_ url: URL) async throws {
-        // request
         let (data, response) = try await URLSession.shared.data(from: url)
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
             throw NetworkError.internalServerError
         }
         let decodedResponse = try JSONDecoder().decode([TVSeries].self, from: data)
         self.results = decodedResponse
+        print(results)
+    }
+    
+    func fetchPosterImage(url: URL) async throws -> UIImage? {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let posterImage = UIImage(data: data) else {
+            throw NetworkError.basRequest
+        }
+        return posterImage
     }
 }
